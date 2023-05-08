@@ -6,7 +6,7 @@ class Mapa{
 	enum class Elementos{
 		VACIO, JUGADOR, CAJA, PARED, FINAL
 	};
-
+	
 	private: 
 	int posJugador_x;
 	int posJugador_y;
@@ -17,6 +17,7 @@ class Mapa{
 	
 	public:
 	int N, M;
+
 								//Public
 	Elementos** matriz;			//Para que se pueda usar la matriz por otras funciones
 	//La matriz posse elementos. Elementos es un tipo. La matriz es de elementos
@@ -38,10 +39,119 @@ class Mapa{
 		this -> M = M;
 	}
 	
-	void mover_arriba();
-	void mover_izquierda();
-	void mover_abajo();
-	void mover_derecha();
+	void mover_arriba(){
+		Elementos aux = matriz[posJugador_y][posJugador_x];
+		Elementos posDecrement = matriz[posJugador_y -1][posJugador_x];
+
+		if(posDecrement == Mapa::Elementos::PARED){
+			matriz[posJugador_y][posJugador_x] = matriz[posJugador_y][posJugador_x];
+
+		}else if(posDecrement == Mapa::Elementos::CAJA){
+			
+			if(matriz[posJugador_y -2][posJugador_x] == Mapa::Elementos::VACIO){
+				
+				matriz[posJugador_y -2][posJugador_x] = Mapa::Elementos::CAJA;
+				matriz[posJugador_y -1][posJugador_x] = Mapa::Elementos::VACIO;
+
+				matriz[posJugador_y -1][posJugador_x] = matriz[posJugador_y][posJugador_x];
+				matriz[posJugador_y][posJugador_x] = Mapa::Elementos::VACIO;
+
+			}else{
+				matriz[posJugador_y][posJugador_x] = matriz[posJugador_y][posJugador_x];
+			}
+
+		}else if(posDecrement == Mapa::Elementos::VACIO) {
+			matriz[posJugador_y][posJugador_x] = posDecrement;
+			matriz[posJugador_y-1][posJugador_x] = aux; 
+		}
+		
+	}
+
+
+	void mover_izquierda(){
+		Elementos aux = matriz[posJugador_y][posJugador_x];
+		Elementos posDecrementIzq = matriz[posJugador_y][posJugador_x-1];
+
+		if(posDecrementIzq == Mapa::Elementos::PARED){
+			matriz[posJugador_y][posJugador_x] = matriz[posJugador_y][posJugador_x];
+
+		}else if(posDecrementIzq == Mapa::Elementos::CAJA){
+			
+			if(matriz[posJugador_y][posJugador_x -2] == Mapa::Elementos::VACIO){
+				
+				matriz[posJugador_y][posJugador_x -2] = Mapa::Elementos::CAJA;
+				matriz[posJugador_y][posJugador_x -1] = Mapa::Elementos::VACIO;
+
+				matriz[posJugador_y][posJugador_x -1] = matriz[posJugador_y][posJugador_x];
+				matriz[posJugador_y][posJugador_x] = Mapa::Elementos::VACIO;
+				
+			}else{
+				matriz[posJugador_y][posJugador_x] = matriz[posJugador_y][posJugador_x];
+			}
+
+		}else if(posDecrementIzq == Mapa::Elementos::VACIO) {
+			matriz[posJugador_y][posJugador_x] = posDecrementIzq;
+			matriz[posJugador_y][posJugador_x-1] = aux; 
+		}
+	}
+
+	
+	void mover_abajo(){
+		Elementos aux = matriz[posJugador_y][posJugador_x];
+		Elementos posIncrement = matriz[posJugador_y +1][posJugador_x];
+
+		if(posIncrement == Mapa::Elementos::PARED){
+			matriz[posJugador_y][posJugador_x] = matriz[posJugador_y][posJugador_x];
+
+		}else if(posIncrement == Mapa::Elementos::CAJA){
+			
+			if(matriz[posJugador_y +2][posJugador_x] == Mapa::Elementos::VACIO){
+				
+				matriz[posJugador_y +2][posJugador_x] = Mapa::Elementos::CAJA;
+				matriz[posJugador_y +1][posJugador_x] = Mapa::Elementos::VACIO;
+
+				matriz[posJugador_y +1][posJugador_x] = matriz[posJugador_y][posJugador_x];
+				matriz[posJugador_y][posJugador_x] = Mapa::Elementos::VACIO;
+
+			}else{
+				matriz[posJugador_y][posJugador_x] = matriz[posJugador_y][posJugador_x];
+			}
+
+		}else if(posIncrement == Mapa::Elementos::VACIO) {
+			matriz[posJugador_y][posJugador_x] = posIncrement;
+			matriz[posJugador_y+1][posJugador_x] = aux; 
+		}
+	}
+
+
+	void mover_derecha(){
+		Elementos aux = matriz[posJugador_y][posJugador_x];
+		Elementos posIncrementDer = matriz[posJugador_y][posJugador_x+1];
+
+		if(posIncrementDer == Mapa::Elementos::PARED){
+			matriz[posJugador_y][posJugador_x] = matriz[posJugador_y][posJugador_x];
+
+		}else if(posIncrementDer == Mapa::Elementos::CAJA){
+			
+			if(matriz[posJugador_y][posJugador_x +2] == Mapa::Elementos::VACIO){
+				
+				matriz[posJugador_y][posJugador_x +2] = Mapa::Elementos::CAJA;
+				matriz[posJugador_y][posJugador_x +1] = Mapa::Elementos::VACIO;
+
+				matriz[posJugador_y][posJugador_x +1] = matriz[posJugador_y][posJugador_x];
+				matriz[posJugador_y][posJugador_x] = Mapa::Elementos::VACIO;
+				
+			}else{
+				matriz[posJugador_y][posJugador_x] = matriz[posJugador_y][posJugador_x];
+			}
+
+
+		}else if(posIncrementDer == Mapa::Elementos::VACIO) {
+			matriz[posJugador_y][posJugador_x] = posIncrementDer;
+			matriz[posJugador_y][posJugador_x+1] = aux; 
+		}
+		
+	}
 
 	/*int** crear_matriz(int N, int M){
 		int** matriz = new int* [M];
