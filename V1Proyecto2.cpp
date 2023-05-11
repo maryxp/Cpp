@@ -51,15 +51,13 @@ class Mapa{
 				matriz[posJugador_y -1][posJugador_x] = matriz[posJugador_y][posJugador_x];
 				matriz[posJugador_y][posJugador_x] = Mapa::Elementos::VACIO;
 
-			}else{
-				matriz[posJugador_y][posJugador_x] = matriz[posJugador_y][posJugador_x];
-			}
-
+			}else{		//Si en dos posiciones mas no es vacio entonces es pared o caja y quedara igual
+				matriz[posJugador_y][posJugador_x] = matriz[posJugador_y][posJugador_x];	}
+		
 		}else if(posDecrement == Mapa::Elementos::VACIO) {
 			matriz[posJugador_y][posJugador_x] = posDecrement;
 			matriz[posJugador_y-1][posJugador_x] = aux; 
 		}
-		
 	}
 
 	void mover_izquierda(){
@@ -80,9 +78,8 @@ class Mapa{
 				matriz[posJugador_y][posJugador_x] = Mapa::Elementos::VACIO;
 				
 			}else{
-				matriz[posJugador_y][posJugador_x] = matriz[posJugador_y][posJugador_x];
+				matriz[posJugador_y][posJugador_x] = matriz[posJugador_y][posJugador_x];	
 			}
-
 		}else if(posDecrementIzq == Mapa::Elementos::VACIO) {
 			matriz[posJugador_y][posJugador_x] = posDecrementIzq;
 			matriz[posJugador_y][posJugador_x-1] = aux; 
@@ -107,9 +104,9 @@ class Mapa{
 				matriz[posJugador_y][posJugador_x] = Mapa::Elementos::VACIO;
 
 			}else{
-				matriz[posJugador_y][posJugador_x] = matriz[posJugador_y][posJugador_x];
+				matriz[posJugador_y][posJugador_x] = matriz[posJugador_y][posJugador_x];		
 			}
-
+		
 		}else if(posIncrement == Mapa::Elementos::VACIO) {
 			matriz[posJugador_y][posJugador_x] = posIncrement;
 			matriz[posJugador_y+1][posJugador_x] = aux; 
@@ -134,26 +131,15 @@ class Mapa{
 				matriz[posJugador_y][posJugador_x] = Mapa::Elementos::VACIO;
 				
 			}else{
-				matriz[posJugador_y][posJugador_x] = matriz[posJugador_y][posJugador_x];
+				matriz[posJugador_y][posJugador_x] = matriz[posJugador_y][posJugador_x];		
 			}
-
-
+		
 		}else if(posIncrementDer == Mapa::Elementos::VACIO) {
 			matriz[posJugador_y][posJugador_x] = posIncrementDer;
 			matriz[posJugador_y][posJugador_x+1] = aux; 
 		}
 		
 	}
-
-	/*int** crear_matriz(int N, int M){
-		int** matriz = new int* [M];
-
-		for(int i = 0; i < N; i++){
-			matriz[i] = new int[M];	//Crear columnas
-
-		}
-		return matriz;
-	}*/
 
 	void imprimirTablero(){
 		
@@ -188,13 +174,18 @@ class Mapa{
 
 class IOHandler{
 	Mapa mapaPrueba;
+
 	public:
 
 	IOHandler(){}
-	IOHandler(Mapa atributo, string nombreArchivo){ this->mapaPrueba = mapaPrueba; }
+	IOHandler(Mapa atributo){ this->mapaPrueba = mapaPrueba; }
+
+	Mapa getMapaPrueba(){
+		return mapaPrueba;
+	}
 
 	int leerArchivo(string nombreArchivo){
-		//Mapa map2;		
+				
 		char caracter;
 		int N, M;
 		//string nombreArchivo;
@@ -208,8 +199,8 @@ class IOHandler{
 
 		if(f.is_open()){		//Sin .eof ya que luego de leer a matriz seria lo ultimo que haya en el archivo
 			
-				f>>N;
-				f>>M;
+			f>>N;
+			f>>M;
 				
 				Mapa::Elementos** matriz = new  Mapa::Elementos*[N];
 
@@ -256,16 +247,17 @@ class IOHandler{
 			//los valores al crear el mapa con la matriz dentro del constructor no se saben
 			//porque en distintos archivos la matriz puede ser distinta por ende NO son constantes
 			
-			Mapa map2{posJugador_x, posJugador_y, puntoFinal_x,puntoFinal_y, matriz, N,M};
+			Mapa map2{posJugador_x,posJugador_y, puntoFinal_x,puntoFinal_y, matriz, N,M};
 			this->mapaPrueba = map2;		//Inicializar el atributo con los valores del constructor	
 		}
-	return 0;
+	
+		return 0;
 	}
 
 	void imprimirTablero(){
 
 		/*Como mapa es solo el capaz de imprimir, para que otras funciones puedan imprimir y
-		no romper el encapsulamiento  hay que crear un metodo que se llame igual y que invoque 
+		no romper el encapsulamiento hay que crear en IO un metodo que se llame igual y que invoque 
 		al imprimir original */
 		this->mapaPrueba.imprimirTablero();
 
@@ -317,15 +309,171 @@ void pruebaTab(){
 	
 }
 
+void impresionesMove(){
+
+	/*
+	Ya que las funciones de movimiento estan en la clase mapa y no se pueden acceder desde IO, ya que hacer una instancia
+	de IO no serviria para acceder a ese mapa. Se crea un get para poder acceder al mapa de IO que por debajo invoca a Class Map
+	*/
+
+	IOHandler leerMove;
+
+	//Pruebas de impresion 	Before & After 
+	//cout<<"================"<<endl;
+	leerMove.leerArchivo("ArribaUno.txt");
+	leerMove.imprimirTablero();
+
+	leerMove.getMapaPrueba().mover_arriba();
+	leerMove.imprimirTablero();
+	cout<<"================"<<endl;
+
+	leerMove.leerArchivo("ArribaDos.txt");
+	leerMove.imprimirTablero();
+	
+	leerMove.getMapaPrueba().mover_arriba();
+	leerMove.imprimirTablero();
+	cout<<"================"<<endl;
+	
+	leerMove.leerArchivo("ArribaTres.txt");
+	leerMove.imprimirTablero();
+	
+	leerMove.getMapaPrueba().mover_arriba();
+	leerMove.imprimirTablero();
+	cout<<"================"<<endl;
+	
+	leerMove.leerArchivo("ArribaCuatro.txt");
+	leerMove.imprimirTablero();
+
+	leerMove.getMapaPrueba().mover_arriba();
+	leerMove.imprimirTablero();
+	cout<<"================"<<endl;
+	
+	leerMove.leerArchivo("ArribaCinco.txt");
+	leerMove.imprimirTablero();
+
+	leerMove.getMapaPrueba().mover_arriba();
+	leerMove.imprimirTablero();
+	cout<<"================"<<endl;
+
+
+	leerMove.leerArchivo("IzqUno.txt");
+	leerMove.imprimirTablero();
+
+	leerMove.getMapaPrueba().mover_izquierda();
+	leerMove.imprimirTablero();
+	cout<<"================"<<endl;
+
+	leerMove.leerArchivo("IzqDos.txt");
+	leerMove.imprimirTablero();
+	
+	leerMove.getMapaPrueba().mover_izquierda();
+	leerMove.imprimirTablero();
+	cout<<"================"<<endl;
+	
+	leerMove.leerArchivo("IzqTres.txt");
+	leerMove.imprimirTablero();
+	
+	leerMove.getMapaPrueba().mover_izquierda();
+	leerMove.imprimirTablero();
+	cout<<"================"<<endl;
+	
+	leerMove.leerArchivo("IzqCuatro.txt");
+	leerMove.imprimirTablero();
+
+	leerMove.getMapaPrueba().mover_izquierda();
+	leerMove.imprimirTablero();
+	cout<<"================"<<endl;
+	
+	leerMove.leerArchivo("IzqCinco.txt");
+	leerMove.imprimirTablero();
+
+	leerMove.getMapaPrueba().mover_izquierda();
+	leerMove.imprimirTablero();
+	cout<<"================"<<endl;
+
+
+	leerMove.leerArchivo("AbajoUno.txt");
+	leerMove.imprimirTablero();
+
+	leerMove.getMapaPrueba().mover_abajo();
+	leerMove.imprimirTablero();
+	cout<<"================"<<endl;
+
+	leerMove.leerArchivo("AbajoDos.txt");
+	leerMove.imprimirTablero();
+	
+	leerMove.getMapaPrueba().mover_abajo();
+	leerMove.imprimirTablero();
+	cout<<"================"<<endl;
+	
+	leerMove.leerArchivo("AbajoTres.txt");
+	leerMove.imprimirTablero();
+	
+	leerMove.getMapaPrueba().mover_abajo();
+	leerMove.imprimirTablero();
+	cout<<"================"<<endl;
+	
+	leerMove.leerArchivo("AbajoCuatro.txt");
+	leerMove.imprimirTablero();
+
+	leerMove.getMapaPrueba().mover_abajo();
+	leerMove.imprimirTablero();
+	cout<<"================"<<endl;
+	
+	leerMove.leerArchivo("AbajoCinco.txt");
+	leerMove.imprimirTablero();
+
+	leerMove.getMapaPrueba().mover_abajo();
+	leerMove.imprimirTablero();
+	cout<<"================"<<endl;
+
+
+	leerMove.leerArchivo("DerUno.txt");
+	leerMove.imprimirTablero();
+
+	leerMove.getMapaPrueba().mover_derecha();
+	leerMove.imprimirTablero();
+	cout<<"================"<<endl;
+
+	leerMove.leerArchivo("DerDos.txt");
+	leerMove.imprimirTablero();
+	
+	leerMove.getMapaPrueba().mover_derecha();
+	leerMove.imprimirTablero();
+	cout<<"================"<<endl;
+	
+	leerMove.leerArchivo("DerTres.txt");
+	leerMove.imprimirTablero();
+	
+	leerMove.getMapaPrueba().mover_derecha();
+	leerMove.imprimirTablero();
+	cout<<"================"<<endl;
+	
+	leerMove.leerArchivo("DerCuatro.txt");
+	leerMove.imprimirTablero();
+
+	leerMove.getMapaPrueba().mover_derecha();
+	leerMove.imprimirTablero();
+	cout<<"================"<<endl;
+	
+	leerMove.leerArchivo("DerCinco.txt");
+	leerMove.imprimirTablero();
+
+	leerMove.getMapaPrueba().mover_derecha();
+	leerMove.imprimirTablero();
+	//cout<<"================"<<endl;	
+
+}
 
 int main(){
-	//int N, M;
+
 	Mapa map;			//Instancie mapa
 	Mapa map2;
 	pruebaTab();
 
 	IOHandler lectura;
 
+	//Pruebas de lectura de archivos
 	lectura.leerArchivo("mapaUno.txt");
 	lectura.imprimirTablero();		//Modifica el objeto luego que lee el archivo
 	lectura.leerArchivo("mapaDos.txt");
@@ -333,6 +481,8 @@ int main(){
 	lectura.leerArchivo("mapaTres.txt");
 	lectura.imprimirTablero();
 	
-
+	
+	
 	return 0;
+
 }

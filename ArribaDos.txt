@@ -1,0 +1,6 @@
+5 4
+XXXX
+X..X
+X.CX
+X.KX
+XXXX
