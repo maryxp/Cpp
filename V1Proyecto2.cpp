@@ -170,6 +170,72 @@ class Mapa{
 			cout<<endl;
 		}
 	}	
+
+	void validadorTab(){
+		int countX = 0, countC = 0, countK = 0, countV = 0, countF = 0;
+
+		for (int i = 0; i < this->N; i++){
+			for (int j = 0; j < this->M;j++){
+			
+				switch (this->matriz[i][j]){      //Que trabaje por cada elemento de la matriz
+					case Mapa::Elementos::PARED :
+						countX++;
+					break;
+									
+					case Mapa::Elementos::CAJA :
+						countC++;
+					break;
+									
+					case Mapa::Elementos::JUGADOR :
+						countK++;
+					break;
+									
+					case Mapa::Elementos::VACIO :
+						countV++;
+					break;
+									
+					case Mapa::Elementos::FINAL :
+						countF++;
+					break;
+				}
+
+			}
+		}
+		if (countX < 1 || countC < 1 || countV < 1 || countF < 1 || countK < 1 || countK > 1){
+			cout<<"Tablero invalido"<<endl;
+		}
+	}
+
+	void ganador(){
+		int countC, countF;
+		Elementos caja;
+		Elementos final;
+
+		for (int i = 0; i < this->N; i++){
+			for (int j = 0; j < this->M; j++){
+			
+				switch (this->matriz[i][j]){     
+					case Mapa::Elementos::CAJA : 
+						countC++;
+						matriz[i][j] = Mapa::Elementos::CAJA;
+						caja = matriz[i][j];
+					break;
+									
+					case Mapa::Elementos::FINAL :
+						countF++;
+						matriz[i][j] = Mapa::Elementos::FINAL;
+						final = matriz[i][j];
+					break;
+				}
+
+				if(countC >= countF){
+					if(caja == final){
+						cout<<"Ganaste la partida"<<endl;
+					}    
+				}
+			}
+		}
+	}
 };
 
 class IOHandler{
@@ -202,9 +268,9 @@ class IOHandler{
 			f>>N;
 			f>>M;
 				
-				Mapa::Elementos** matriz = new  Mapa::Elementos*[N];
+			Mapa::Elementos** matriz = new  Mapa::Elementos*[N];
 
-				for(int i  = 0; i < N; i++){ matriz[i] = new Mapa::Elementos[M]; }
+			for(int i  = 0; i < N; i++){ matriz[i] = new Mapa::Elementos[M]; }
 
 					for (int i = 0; i < N; i++){
 						for (int j = 0; j < M; j++){
@@ -252,6 +318,28 @@ class IOHandler{
 		}
 	
 		return 0;
+	}
+
+	void teclas(){              //Solo mueve no recibe archivos
+		char tecla;
+		cin>>tecla;
+
+		if (tecla == 'W'){   
+			this->mapaPrueba.mover_arriba();
+		}
+
+		if(tecla == 'A'){
+			this->mapaPrueba.mover_izquierda();
+		}
+
+		if(tecla == 'S'){ 
+			this->mapaPrueba.mover_abajo();
+		}
+
+		if(tecla == 'D'){
+			this->mapaPrueba.mover_derecha();
+		}
+		//Sino no se hace nada
 	}
 
 	void imprimirTablero(){
@@ -471,18 +559,31 @@ int main(){
 	Mapa map2;
 	pruebaTab();
 
-	IOHandler lectura;
+	//IOHandler lectura;
 
 	//Pruebas de lectura de archivos
-	lectura.leerArchivo("mapaUno.txt");
-	lectura.imprimirTablero();		//Modifica el objeto luego que lee el archivo
-	lectura.leerArchivo("mapaDos.txt");
+	//lectura.leerArchivo("mapaUno.txt");
+	//lectura.imprimirTablero();		//Modifica el objeto luego que lee el archivo
+	//lectura.leerArchivo("mapaDos.txt");
+	//lectura.imprimirTablero();
+	//lectura.leerArchivo("mapaTres.txt");
+	//lectura.imprimirTablero();
+	
+	IOHandler lectura;
+
+	//Prueba de tableros validos
+	cout<<endl;
+	cout<<endl;
+	lectura.leerArchivo("ValidadoUno.txt");
 	lectura.imprimirTablero();
-	lectura.leerArchivo("mapaTres.txt");
+	lectura.getMapaPrueba().validadorTab();
+	cout<<endl;
+
+	lectura.leerArchivo("ArribaUno.txt");
 	lectura.imprimirTablero();
-	
-	
-	
+	lectura.getMapaPrueba().validadorTab();
+	cout<<endl;
+
 	return 0;
 
 }

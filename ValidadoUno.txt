@@ -1,0 +1,6 @@
+5 5
+XXXXX
+X..FX
+XC.FX
+X.KCX
+XXXXX
