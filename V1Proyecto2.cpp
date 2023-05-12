@@ -198,11 +198,17 @@ class Mapa{
 						countF++;
 					break;
 				}
-
+				/*if(this->matriz[i][j] != Mapa::Elementos::PARED ||this->matriz[i][j] != Mapa::Elementos::CAJA ||
+				this->matriz[i][j] != Mapa::Elementos::JUGADOR || this->matriz[i][j] != Mapa::Elementos::VACIO ||this->matriz[i][j] != Mapa::Elementos::FINAL){
+				cout<<"Tablero invalido"<<endl;
+				}*/
 			}
+			
 		}
 		if (countX < 1 || countC < 1 || countV < 1 || countF < 1 || countK < 1 || countK > 1){
 			cout<<"Tablero invalido"<<endl;
+		}else{
+			cout<<"Tablero correcto"<<endl;
 		}
 	}
 
@@ -226,14 +232,16 @@ class Mapa{
 						matriz[i][j] = Mapa::Elementos::FINAL;
 						final = matriz[i][j];
 					break;
-				}
-
-				if(countC >= countF){
+				}   
+				
+			}
+		}
+		if(countC >= countF){
 					if(caja == final){
 						cout<<"Ganaste la partida"<<endl;
-					}    
-				}
-			}
+					}else{
+						cout<<"Perdiste la partida"<<endl;
+					} 
 		}
 	}
 };
@@ -244,7 +252,7 @@ class IOHandler{
 	public:
 
 	IOHandler(){}
-	IOHandler(Mapa atributo){ this->mapaPrueba = mapaPrueba; }
+	IOHandler(Mapa mapaPrueba){ this->mapaPrueba = mapaPrueba; }
 
 	Mapa getMapaPrueba(){
 		return mapaPrueba;
@@ -261,7 +269,7 @@ class IOHandler{
 		int puntoFinal_x;
 		int puntoFinal_y;
 	
-		ifstream f(nombreArchivo);
+		ifstream f{nombreArchivo};
 
 		if(f.is_open()){		//Sin .eof ya que luego de leer a matriz seria lo ultimo que haya en el archivo
 			
@@ -571,18 +579,42 @@ int main(){
 	
 	IOHandler lectura;
 
-	//Prueba de tableros validos
-	cout<<endl;
-	cout<<endl;
+	/*Prueba de tableros validos
+	
 	lectura.leerArchivo("ValidadoUno.txt");
 	lectura.imprimirTablero();
 	lectura.getMapaPrueba().validadorTab();
 	cout<<endl;
 
-	lectura.leerArchivo("ArribaUno.txt");
+	lectura.leerArchivo("ValidadoDos.txt");
 	lectura.imprimirTablero();
 	lectura.getMapaPrueba().validadorTab();
 	cout<<endl;
+
+	lectura.leerArchivo("ArribaTres.txt");
+	lectura.imprimirTablero();
+	lectura.getMapaPrueba().validadorTab();
+	cout<<endl;*/
+
+	lectura.leerArchivo("Teclas.txt");
+	lectura.imprimirTablero();
+	cout<<endl;
+	lectura.teclas();
+	lectura.imprimirTablero();
+	lectura.teclas();
+	cout<<endl;
+	lectura.imprimirTablero();
+	cout<<endl;
+	lectura.teclas();
+	lectura.imprimirTablero();
+	cout<<endl;
+	/*lectura.getMapaPrueba().mover_arriba();
+	lectura.imprimirTablero();
+	cout<<endl;
+	lectura.getMapaPrueba().mover_arriba();
+	lectura.imprimirTablero();
+	cout<<endl;
+	lectura.getMapaPrueba().ganador();*/
 
 	return 0;
 
